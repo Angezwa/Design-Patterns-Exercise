@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GreatQuotes.ViewModels;
+using System;
 using System.Collections.Generic;
 
 using Xamarin.Forms;
@@ -16,6 +17,11 @@ namespace GreatQuotes.Views {
 
         async void Handle_ToolbarItem_Clicked(object sender, System.EventArgs e) {
             await this.Navigation.PushModalAsync(new NavigationPage(new EditQuotePage()));
+        }
+
+        private void Handle_Tapped(object sender, EventArgs e)
+        {
+            App.GreatQuotesViewModel.SayQuotes(BindingContext as GreatQuoteViewModel);
         }
     }
 }

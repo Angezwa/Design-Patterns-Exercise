@@ -14,6 +14,7 @@ namespace GreatQuotes.iOS {
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        readonly SimpleContainer container = new SimpleContainer();
         public MainViewModel GreatQuotesViewModel { get; private set; }
 
         //
@@ -25,14 +26,24 @@ namespace GreatQuotes.iOS {
         //
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-            var quoteLoader = new QuoteLoader();
-            GreatQuotesViewModel = new MainViewModel(() => quoteLoader.Save(GreatQuotesViewModel.Quotes)) {
-                Quotes = new ObservableCollection<GreatQuoteViewModel>(quoteLoader.Load())
-            };
+            container.Register<IQuoteLoader, QuoteLoader>();
+            container.Register<ITextToSpeech, TextToSpeechService>();
+            container.Create<QuoteManager>();
+
+            ServiceLocator.Instance.Add<ITextToSpeech, TextToSpeechService>();
 
             global::Xamarin.Forms.Forms.Init();
-            var app = new App(GreatQuotesViewModel);
-            LoadApplication(app);
+
+            LoadApplication(new App());
+
+            //var quoteLoader = new QuoteLoader();
+            //GreatQuotesViewModel = new MainViewModel(() => quoteLoader.Save(GreatQuotesViewModel.Quotes)) {
+            //    Quotes = new ObservableCollection<GreatQuoteViewModel>(quoteLoader.Load())
+            //};
+
+            //global::Xamarin.Forms.Forms.Init();
+            //var app = new App(GreatQuotesViewModel);
+            //LoadApplication(app);
 
             return base.FinishedLaunching(uiApplication, launchOptions);
         }

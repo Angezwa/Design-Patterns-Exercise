@@ -17,6 +17,13 @@ namespace GreatQuotes
             MainPage = new NavigationPage (new QuoteListPage());
         }
 
+        public App()
+        {
+            InitializeComponent();
+            GreatQuotesViewModel = new MainViewModel();
+            MainPage = new NavigationPage(new QuoteListPage());
+        }
+
         protected override void OnStart()
         {
             // Handle when your app starts
@@ -24,7 +31,7 @@ namespace GreatQuotes
 
         protected override void OnSleep()
         {
-            GreatQuotesViewModel.SaveQuotes();
+            QuoteManager.Instance.Save();
         }
 
         protected override void OnResume()
